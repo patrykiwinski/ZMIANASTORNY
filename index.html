@@ -214,6 +214,21 @@ body {
         transform: translateX(1);
     }
 }
+.btn-pinkgold {
+  background: linear-gradient(45deg, #ff5fad, #ffd27f);
+  color: black;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+  font-weight: 600;
+  box-shadow:
+    inset 2px 2px 5px rgba(255,255,255,0.4),
+    4px 4px 10px rgba(0,0,0,0.3);
+}
+
+.btn-pinkgold:hover {
+  background: linear-gradient(45deg, #ff78c9, #ffe3a6);
+  transform: scale(1.18);
+  border: none;
+}
 
 
 
@@ -229,6 +244,7 @@ function WinOpen_stare() {
 
   window.open("stare.html", "stare", `toolbar=no,directories=no,menubar=no,height=800,width=2000`);
 }
+
 
 function WinOpen_z35() {
   const leftPosition = (window.screen.width - 600) / 2;
@@ -1260,6 +1276,12 @@ function okno_zamknij() {
 
 <div class="container">
 <form>
+	<h1> ANIKETAAAAAAAAAA</h1>
+	<input type="button"
+       class="custom-btn btn-pinkgold"
+       value="ANKIETA"
+       onclick="window.open('ankieta.html', '_blank')">
+<br><br>
   <h1 >Szkielet zaliczeniowy JavaScript Patryk Iwinski 3g</h1>
 
 <center>
