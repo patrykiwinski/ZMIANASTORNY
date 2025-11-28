@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Ankieta – Kartki upominkowe</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background:#f4f4f4;
+        padding:20px;
+        line-height:1.6;
+    }
+    h1 { 
+        text-align:center; 
+        color:#d62828; 
+    }
+    .qbox {
+        background:white;
+        padding:15px;
+        margin-bottom:20px;
+        border-radius:10px;
+        border-left:5px solid #d62828;
+    }
+    .btn {
+        background:#d62828;
+        color:white;
+        border:none;
+        padding:12px 25px;
+        border-radius:8px;
+        font-size:16px;
+        cursor:pointer;
+        display:block;
+        margin:0 auto;
+    }
+    @media(max-width:600px){
+        body { padding:10px; }
+        .qbox { padding:12px; }
+    }
+</style>
+</head>
+
+<body>
+
+<h1>🎁 Ankieta – kartki upominkowe</h1>
+
+<form id="ankieta">
+    <div class="qbox">
+        <b>1. Czy lubisz kartki upominkowe?</b><br><br>
+
+        <label>A) TAK  
+            <input type="checkbox" name="p1" value="TAK">
+        </label><br>
+
+        <label>B) NIE  
+            <input type="checkbox" name="p1" value="NIE">
+        </label><br>
+
+        <label>C) CZASEM  
+            <input type="checkbox" name="p1" value="CZASEM">
+        </label><br>
+
+        <label>D) INACZEJ  
+            <input type="checkbox" name="p1" value="INACZEJ">
+        </label>
+    </div>
+</form>
+
+<button class="btn" onclick="saveTXT()">Pobierz odpowiedzi</button>
+
+<script>
+function saveTXT() {
+    let output = "";
+    const question = "1. Czy lubisz kartki upominkowe?";
+    
+    let selected = [...document.querySelectorAll("input[name='p1']:checked")]
+        .map(c => c.value)
+        .join(", ");
+
+    if(selected.length === 0) selected = "BRAK ODPOWIEDZI";
+
+    output += question + " — " + selected + "\n";
+
+    let blob = new Blob([output], {type:"text/plain"});
+    let url = URL.createObjectURL(blob);
+
+    let a = document.createElement("a");
+    a.href = url;
+    a.download = "odpowiedzi.txt";
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>
