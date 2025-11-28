@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<title>Ankieta prezentowa – 25 pytań</title>
+<title>Ankieta – 25 pytań</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -34,12 +34,14 @@
         display:block;
         margin:0 auto;
     }
-    input[type="text"], textarea {
-        width:100%; 
-        padding:8px; 
-        border-radius:6px; 
-        border:1px solid #ccc; 
-        margin-top:8px;
+    textarea.output {
+        width:100%;
+        height:300px;
+        padding:10px;
+        margin-top:20px;
+        border-radius:8px;
+        border:1px solid #ccc;
+        white-space:pre-wrap;
     }
 </style>
 </head>
@@ -50,7 +52,9 @@
 
 <form id="ankieta"></form>
 
-<button class="btn" onclick="saveTXT()">Pobierz odpowiedzi</button>
+<button class="btn" onclick="showOutput()">Pokaż odpowiedzi</button>
+
+<textarea class="output" id="outputArea" placeholder="Tu pojawią się odpowiedzi..." readonly></textarea>
 
 <script>
 // ----------- 20 PYTAŃ ZAMKNIĘTYCH -------------------
@@ -120,8 +124,8 @@ open.forEach((q, i)=> {
     </div>`;
 });
 
-// EXPORT TXT
-function saveTXT() {
+// WYSWIETLANIE ODPOWIEDZI
+function showOutput() {
     let output = "";
 
     // Zamknięte
@@ -142,13 +146,7 @@ function saveTXT() {
         output += q + " — " + val + "\n";
     });
 
-    let blob = new Blob([output], {type:"text/plain"});
-    let url = URL.createObjectURL(blob);
-    let a = document.createElement("a");
-    a.href = url;
-    a.download = "odpowiedzi.txt";
-    a.click();
-    URL.revokeObjectURL(url);
+    document.getElementById("outputArea").value = output;
 }
 </script>
 
