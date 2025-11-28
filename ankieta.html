@@ -2,8 +2,9 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<title>Ankieta – Kartki upominkowe</title>
+<title>Ankieta prezentowa – 25 pytań</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -33,62 +34,120 @@
         display:block;
         margin:0 auto;
     }
-    @media(max-width:600px){
-        body { padding:10px; }
-        .qbox { padding:12px; }
+    input[type="text"], textarea {
+        width:100%; 
+        padding:8px; 
+        border-radius:6px; 
+        border:1px solid #ccc; 
+        margin-top:8px;
     }
 </style>
 </head>
 
 <body>
 
-<h1>🎁 Ankieta – kartki upominkowe</h1>
+<h1>🎁 Ankieta prezentowa – 25 pytań</h1>
 
-<form id="ankieta">
-    <div class="qbox">
-        <b>1. Czy lubisz kartki upominkowe?</b><br><br>
-
-        <label>A) TAK  
-            <input type="checkbox" name="p1" value="TAK">
-        </label><br>
-
-        <label>B) NIE  
-            <input type="checkbox" name="p1" value="NIE">
-        </label><br>
-
-        <label>C) CZASEM  
-            <input type="checkbox" name="p1" value="CZASEM">
-        </label><br>
-
-        <label>D) INACZEJ  
-            <input type="checkbox" name="p1" value="INACZEJ">
-        </label>
-    </div>
-</form>
+<form id="ankieta"></form>
 
 <button class="btn" onclick="saveTXT()">Pobierz odpowiedzi</button>
 
 <script>
+// ----------- 20 PYTAŃ ZAMKNIĘTYCH -------------------
+const closed = [
+"1. Czy lubisz kartki upominkowe?",
+"2. Czy lubisz drobne przekąski jako prezent?",
+"3. Czy lubisz świąteczny klimat?",
+"4. Czy lubisz rzeczy, które można ustawić na biurku?",
+"5. Czy lubisz rzeczy, które pachną ładnie?",
+"6. Czy wolisz prezenty praktyczne?",
+"7. Czy lubisz prezenty w humorystycznym stylu?",
+"8. Czy lubisz drobne dekoracje do pokoju?",
+"9. Czy wolisz prezenty symboliczne lub pamiątkowe?",
+"10. Czy lubisz niespodzianki?",
+"11. Czy wolisz coś do jedzenia jako prezent?",
+"12. Czy wolisz coś do codziennego użytku?",
+"13. Czy lubisz minimalistyczne rzeczy?",
+"14. Czy lubisz rzeczy kolorowe?",
+"15. Czy lubisz małe gadżety?",
+"16. Czy lubisz rzeczy do relaksu?",
+"17. Czy lubisz rzeczy kreatywne (np. notatki, karteczki)?",
+"18. Czy lubisz rzeczy pomagające w organizacji (np. małe pojemniki)?",
+"19. Czy lubisz lekkie, świeże zapachy?",
+"20. Czy lubisz spokojne, neutralne kolory?"
+];
+
+// ----------- 5 PYTAŃ OTWARTYCH -------------------
+const open = [
+"21. Jakie przekąski lubisz najbardziej?",
+"22. Jakie drobne prezenty kiedyś Ci się spodobały?",
+"23. Jakie zapachy lub aromaty lubisz?",
+"24. Co chciał(a)byś mieć na biurku lub w pokoju?",
+"25. Co jest dla Ciebie fajnym, małym prezentem?"
+];
+
+// GENEROWANIE HTML
+let form = document.getElementById("ankieta");
+
+closed.forEach((q, i)=> {
+    form.innerHTML += `
+    <div class="qbox">
+        <b>${q}</b><br><br>
+
+        <label>A) TAK  
+            <input type="checkbox" name="p${i+1}" value="TAK">
+        </label><br>
+
+        <label>B) NIE  
+            <input type="checkbox" name="p${i+1}" value="NIE">
+        </label><br>
+
+        <label>C) CZASEM  
+            <input type="checkbox" name="p${i+1}" value="CZASEM">
+        </label><br>
+
+        <label>D) INACZEJ  
+            <input type="checkbox" name="p${i+1}" value="INACZEJ">
+        </label>
+    </div>`;
+});
+
+open.forEach((q, i)=> {
+    form.innerHTML += `
+    <div class="qbox">
+        <b>${q}</b><br>
+        <textarea name="o${i+1}" rows="2"></textarea>
+    </div>`;
+});
+
+// EXPORT TXT
 function saveTXT() {
     let output = "";
-    const question = "1. Czy lubisz kartki upominkowe?";
-    
-    let selected = [...document.querySelectorAll("input[name='p1']:checked")]
-        .map(c => c.value)
-        .join(", ");
 
-    if(selected.length === 0) selected = "BRAK ODPOWIEDZI";
+    // Zamknięte
+    closed.forEach((q, i) => {
+        let selected = [...document.querySelectorAll(`input[name='p${i+1}']:checked`)]
+            .map(c => c.value)
+            .join(", ");
 
-    output += question + " — " + selected + "\n";
+        if(selected.length === 0) selected = "BRAK ODPOWIEDZI";
+
+        output += q + " — " + selected + "\n";
+    });
+
+    // Otwarte
+    open.forEach((q, i) => {
+        let val = document.querySelector(`textarea[name='o${i+1}']`).value.trim();
+        if(val.length === 0) val = "BRAK ODPOWIEDZI";
+        output += q + " — " + val + "\n";
+    });
 
     let blob = new Blob([output], {type:"text/plain"});
     let url = URL.createObjectURL(blob);
-
     let a = document.createElement("a");
     a.href = url;
     a.download = "odpowiedzi.txt";
     a.click();
-
     URL.revokeObjectURL(url);
 }
 </script>
